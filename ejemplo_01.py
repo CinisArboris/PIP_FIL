@@ -3,71 +3,103 @@
 import math
 
 
-# -------------------------------------------------
-def filtro01(cadena):
-	# cada letra mayúscula o minúscula
-	# debe desplazarse tres posiciones hacia la derecha
-	resultado = filtro02(cadena, 3, 0, False)
 
-	resultado = resultado[::-1]
-	
-	
-	mitad = int(len(resultado)/2)
-	p1 = resultado[:mitad]
-	p2 = resultado[mitad:]
-	# la mitad en adelante (truncado)
-	# deben moverse una posición a la izquierda
-	p2 = filtro02(p2, 1, 1, True)
-	
-	resultado = p1+p2
-	return resultado
 # -------------------------------------------------
-def rotacion(cadena, posiciones, orientacion, codigo):
-	# [orientacion] == 0 , derecha
-	# [orientacion] == 1 , izquierda
-	resultado = ''
-	for cadA in cadena:
-		if (
-			((ord(cadA) >= ord('a')) and (ord(cadA) <= ord('o')))
-			or
-			((ord(cadA) >= ord('p')) and (ord(cadA) <= ord('z')))
-			or
-			((ord(cadA) >= ord('A')) and (ord(cadA) <= ord('O')))
-			or
-			((ord(cadA) >= ord('P')) and (ord(cadA) <= ord('Z')))
-			or
-			codigo
-		):
-			varA = cadA			#string
-			varB = ord(cadA)	#decimal
-			varC = chr(varB)	#string
-			if (orientacion == 0): varB = varB + posiciones	#decimal +3
-			if (orientacion == 1): varB = varB - posiciones	#decimal +3
-			varA = chr(varB)	#string +3
-			resultado = resultado + varA
-		else:
-			resultado = resultado + cadA
-	return resultado
+def unir(vector_parte_a, vector_parte_b):
+	vector_resultado = []
+	# len vpa = vpb
+	repeticion = len(vector_parte_a)
+	for it in range(repeticion):
+		vector_resultado.append(
+				str(vector_parte_a[it]) +
+				str(vector_parte_b[it])
+			)
+	mostrar_mensaje(vector_resultado)
+# -------------------------------------------------
+def rotar_lineas_2(vectorLineas, rotacion, movi):
+	vectorLineas_tmp = []
+	letra_tmp = ''
+	for linea in vectorLineas:
+		letra_tmp = ''
+		for letra in linea:
+			# rotacion :: [0=derecha][1=izquierda]
+			# movi = n :: cantidad del desplazamiento
+			if (rotacion == 0): letra_tmp = letra_tmp + chr(ord(letra) + movi)
+			if (rotacion == 1): letra_tmp = letra_tmp + chr(ord(letra) - movi)
+		vectorLineas_tmp.append(letra_tmp)
+		#print ('letra_tmp', letra_tmp)
+	vectorLineas = vectorLineas_tmp
+	return vectorLineas
+# -------------------------------------------------
+def separar(vectorLineas):
+	vector_parte_a = []
+	vector_parte_b = []	
+	
+	for cadena in vectorLineas:
+		mitad = int(len(cadena)/2)
+		vector_parte_a.append(cadena[:mitad]) # ab
+		vector_parte_b.append(cadena[mitad:]) # cd
+	print ('separar', 'vector_parte_a', vector_parte_a)
+	print ('separar', 'vector_parte_b', vector_parte_b)
+	# rotacion :: [0=derecha][1=izquierda]
+	# movi = n :: cantidad del desplazamiento
+	rotacion = 1
+	movi = 1
+	vector_parte_b = rotar_lineas_2(vector_parte_b, rotacion, movi)
+	print ('separar', 'vector_parte_b', vector_parte_b)
+	#exit()
+	unir(vector_parte_a, vector_parte_b)
+# -------------------------------------------------
+def invertir(vectorLineas):
+	vectorLineas_tmp = []
+	for linea in vectorLineas:
+		vectorLineas_tmp.append(linea[::-1])
+	vectorLineas = vectorLineas_tmp
+	return vectorLineas
+# -------------------------------------------------
+def rotar_lineas(vectorLineas, rotacion, movi):
+	vectorLineas_tmp = []
+	letra_tmp = ''
+	print ('rotar_lineas', 'antes', vectorLineas)
+	for linea in vectorLineas:
+		letra_tmp = ''
+		for letra in linea:
+			if (
+				((ord(letra) >= ord('a')) and (ord(letra) <= ord('o')))
+				or
+				((ord(letra) >= ord('p')) and (ord(letra) <= ord('z')))
+				or
+				((ord(letra) >= ord('A')) and (ord(letra) <= ord('O')))
+				or
+				((ord(letra) >= ord('P')) and (ord(letra) <= ord('Z')))
+			):
+				# rotacion :: [0=derecha][1=izquierda]
+				# movi = n :: cantidad del desplazamiento
+				if (rotacion == 0): letra_tmp = letra_tmp + str(chr(ord(letra) + movi))
+				if (rotacion == 1): letra_tmp = letra_tmp + str(chr(ord(letra) - movi))
+			else:
+				letra_tmp = letra_tmp + letra
+		vectorLineas_tmp.append(letra_tmp)
+		#print ('letra_tmp', letra_tmp)
+	vectorLineas = vectorLineas_tmp
+	print ('rotar_lineas', 'despu', vectorLineas)
+	#return vectorLineas
+	vectorLineas = invertir(vectorLineas)
+	print ('rotar_lineas', 'inver', vectorLineas)
+	#exit()
+	separar(vectorLineas)
 # -------------------------------------------------
 def procesar_lineas_entrada(vectorLineas):
 	vector_aux = []
-	for linea in vectorLineas:
-		vector_aux.append(rotar_linea(linea))
-	# tipo = 0 :: rotacion derecha
-	# tipo = 1 :: rotacion izquierda
+	# rotacion :: [0=derecha][1=izquierda]
 	# movi = n :: cantidad del desplazamiento
-	tipo = 0
-	movi = 3	
-	#rotacion(vectorLineas, tipo, movi)
-	exit()
-# -------------------------------------------------	
-def mostrar_mensaje(cadena):
-	print (cadena)
-	print ('*'*40)
+	rotacion	= 0
+	movi		= 3
+	rotar_lineas(vectorLineas, rotacion, movi)
 # -------------------------------------------------
-def verif_long_lineas_de_entrada(string_alfanumerico):
+def verificar_longitud_lineas_entrada(string_alfanumerico):
 	entradaMIN = 1
-	entradaMAX = 3
+	entradaMAX = 100
 	longitud_actual = len(string_alfanumerico)
 	bandera = True
 	if (longitud_actual < entradaMIN):
@@ -80,9 +112,26 @@ def verif_long_lineas_de_entrada(string_alfanumerico):
 		bandera = False
 	return bandera
 # -------------------------------------------------
-def verificar_cant_lineas(nro_lineas):
+def lineas_entrada(nro_lineas):
+	vectorLineas = []
+	linea = 0
+	bandera = False
+	while (linea < nro_lineas):
+		string_alfanumerico = input('Linea '+str(linea)+'     :: ')
+		bandera = verificar_longitud_lineas_entrada(string_alfanumerico)
+		if (bandera):
+			linea = linea + 1
+			bandera = False
+			vectorLineas.append(string_alfanumerico)
+	procesar_lineas_entrada(vectorLineas)
+# -------------------------------------------------
+def mostrar_mensaje(cadena):
+	print (cadena)
+	print ('*'*40)
+# -------------------------------------------------
+def verificar_cantidad_lineas(nro_lineas):
 	entradaMIN = 1
-	entradaMAX = 3
+	entradaMAX = 10
 	mensaje = ''
 	bandera = True
 	if (not nro_lineas.isnumeric()):
@@ -101,26 +150,13 @@ def verificar_cant_lineas(nro_lineas):
 			bandera = False
 	return bandera
 # -------------------------------------------------
-def lineas_de_entrada(nro_lineas):
-	vectorLineas = []
-	linea = 0
-	bandera = False
-	while (linea < nro_lineas):
-		string_alfanumerico = input('Linea '+str(linea)+'     :: ')
-		bandera = verif_long_lineas_de_entrada(string_alfanumerico)
-		if (bandera):
-			linea = linea + 1
-			bandera = False
-			vectorLineas.append(string_alfanumerico)
-	procesar_lineas_entrada(vectorLineas)
-# -------------------------------------------------
 def cantidad_lineas():
 	bandera = False
 	while (not bandera):
 		nro_lineas = input('[nro_lineas]     :: ')
-		bandera = verificar_cant_lineas(nro_lineas)
+		bandera = verificar_cantidad_lineas(nro_lineas)
 	nro_lineas = int(nro_lineas)
-	lineas_de_entrada(nro_lineas)
+	lineas_entrada(nro_lineas)
 # **************************************************
 # ******************  M  A  I  N
 cantidad_lineas()

@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 # Vargas Medina Eyver Emilio - 213128780
-import math
-
-
 
 # -------------------------------------------------
 def unir(vector_parte_a, vector_parte_b):

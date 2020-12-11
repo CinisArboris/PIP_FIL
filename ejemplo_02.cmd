@@ -1,1 +1,1 @@
-ls -al | grep png > log && cat log
+ls -alR . | grep png > log && cat log

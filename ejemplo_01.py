@@ -39,14 +39,14 @@ def separar(vectorLineas):
 		mitad = int(len(cadena)/2)
 		vector_parte_a.append(cadena[:mitad]) # ab
 		vector_parte_b.append(cadena[mitad:]) # cd
-	print ('separar', 'vector_parte_a', vector_parte_a)
-	print ('separar', 'vector_parte_b', vector_parte_b)
+	#print ('separar', 'vector_parte_a', vector_parte_a)
+	#print ('separar', 'vector_parte_b', vector_parte_b)
 	# rotacion :: [0=derecha][1=izquierda]
 	# movi = n :: cantidad del desplazamiento
 	rotacion = 1
 	movi = 1
 	vector_parte_b = rotar_lineas_2(vector_parte_b, rotacion, movi)
-	print ('separar', 'vector_parte_b', vector_parte_b)
+	#print ('separar', 'vector_parte_b', vector_parte_b)
 	#exit()
 	unir(vector_parte_a, vector_parte_b)
 # -------------------------------------------------
@@ -60,7 +60,7 @@ def invertir(vectorLineas):
 def rotar_lineas(vectorLineas, rotacion, movi):
 	vectorLineas_tmp = []
 	letra_tmp = ''
-	print ('rotar_lineas', 'antes', vectorLineas)
+	#print ('rotar_lineas', 'antes', vectorLineas)
 	for linea in vectorLineas:
 		letra_tmp = ''
 		for letra in linea:
@@ -82,10 +82,10 @@ def rotar_lineas(vectorLineas, rotacion, movi):
 		vectorLineas_tmp.append(letra_tmp)
 		#print ('letra_tmp', letra_tmp)
 	vectorLineas = vectorLineas_tmp
-	print ('rotar_lineas', 'despu', vectorLineas)
+	#print ('rotar_lineas', 'despu', vectorLineas)
 	#return vectorLineas
 	vectorLineas = invertir(vectorLineas)
-	print ('rotar_lineas', 'inver', vectorLineas)
+	#print ('rotar_lineas', 'inver', vectorLineas)
 	#exit()
 	separar(vectorLineas)
 # -------------------------------------------------
